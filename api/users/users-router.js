@@ -3,7 +3,6 @@ const {
   validateUserId,
   validateUser,
   validatePost,
-
 } = require('../middleware/middleware')
 
 const User = require('./users-model')
@@ -20,12 +19,15 @@ router.get('/', (req, res, next) => {
 });
 
 router.get('/:id', validateUserId, (req, res) => {
-  console.log(req.user)
- 
-});
+  res.json(req.user)
+ });
 
-router.post('/', validateUser, (req, res) => {
-
+router.post('/', validateUser, (req, res, next) => {
+  User.insert({ name: req.name })
+  .then(newUser => {
+    res.status(201).json(newUser)
+  })
+  .catch(next)
 });
 
 router.put('/:id', validateUserId, validateUser, (req, res) => {
