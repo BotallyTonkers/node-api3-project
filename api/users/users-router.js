@@ -30,8 +30,15 @@ router.post('/', validateUser, (req, res, next) => {
   .catch(next)
 });
 
-router.put('/:id', validateUserId, validateUser, (req, res) => {
- 
+router.put('/:id', validateUserId, validateUser, (req, res, next) => {
+ User.update(req.params.id, { name: req.name })
+ .then(() => {
+  return User.getById(req.params.id)
+ })
+ .then(user => {
+  res.json(user)
+ })
+ .catch(next)
 });
 
 router.delete('/:id', validateUserId, (req, res) => {
